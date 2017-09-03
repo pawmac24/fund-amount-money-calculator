@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface FundMoneyDivisionCalculatorService {
     List<FundAmountOfMoneyDivision> divideAmountOfMoney(BigDecimal investmentMoney,
-                                                        InvestmentProfile investmentProfile, List<InvestmentFund> investmentFunds);
+                                                        InvestmentProfile investmentProfile,
+                                                        List<InvestmentFund> investmentFunds);
 }
