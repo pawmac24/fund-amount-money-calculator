@@ -4,8 +4,6 @@ import demo.model.FundAmountOfMoneyDivision;
 import demo.model.FundType;
 import demo.model.InvestmentFund;
 import demo.model.profiles.InvestmentProfile;
-import demo.model.profiles.SafeInvestmentProfile;
-import org.apache.commons.collections.ArrayStack;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
