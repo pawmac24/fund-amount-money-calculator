@@ -27,35 +27,60 @@ public class FundMoneyDivisionCalculatorServiceImpl implements FundMoneyDivision
                 .stream()
                 .filter(i -> i.getType().equals(FundType.POLISH))
                 .collect(Collectors.toList());
-        BigDecimal fundListSize = new BigDecimal(polishFundList.size()).setScale(4, BigDecimal.ROUND_HALF_DOWN);
-        for(InvestmentFund investmentFund : polishFundList){
-            FundAmountOfMoneyDivision fundAmountOfMoneyDivision = new FundAmountOfMoneyDivision();
-            fundAmountOfMoneyDivision.setFundType(investmentFund.getType());
-            fundAmountOfMoneyDivision.setFundName(investmentFund.getName());
-            BigDecimal dividedMoney = investmentMoney.multiply(investmentProfile.getPercentPolish())
-                    .divide(fundListSize, 4, BigDecimal.ROUND_HALF_DOWN)
-                    .setScale(0, BigDecimal.ROUND_HALF_DOWN);
-            fundAmountOfMoneyDivision.setDividedMoney(dividedMoney);
-            BigDecimal dividedPercent = investmentProfile.getPercentPolish()
-                    .divide(fundListSize, 4, BigDecimal.ROUND_HALF_DOWN)
-                    .setScale(4, BigDecimal.ROUND_HALF_DOWN);
-            fundAmountOfMoneyDivision.setDividedPercent(dividedPercent);
-            System.out.println(fundAmountOfMoneyDivision.toString());
-            fundAmountOfMoneyDivisionList.add(fundAmountOfMoneyDivision);
-        }
+        fundAmountOfMoneyDivisionList.addAll(divideMoneyAndPercent(investmentMoney, investmentProfile, polishFundList));
 
         List<InvestmentFund> foreignFundList = investmentFunds
                 .stream()
                 .filter(i -> i.getType().equals(FundType.FOREIGN))
                 .collect(Collectors.toList());
-        System.out.println("foreignFundList size = " + foreignFundList.size());
+        fundAmountOfMoneyDivisionList.addAll(divideMoneyAndPercent(investmentMoney, investmentProfile, foreignFundList));
+
 
         List<InvestmentFund> moneyFundList = investmentFunds
                 .stream()
                 .filter(i -> i.getType().equals(FundType.MONEY))
                 .collect(Collectors.toList());
-        System.out.println("moneyFundList size = " + moneyFundList.size());
+        fundAmountOfMoneyDivisionList.addAll(divideMoneyAndPercent(investmentMoney, investmentProfile, moneyFundList));
 
+        return fundAmountOfMoneyDivisionList;
+    }
+
+    private List<FundAmountOfMoneyDivision> divideMoneyAndPercent(BigDecimal investmentMoney,
+                                                                  InvestmentProfile investmentProfile,
+                                                                  List<InvestmentFund> fundList) {
+        List<FundAmountOfMoneyDivision> fundAmountOfMoneyDivisionList = new ArrayList<>();
+        BigDecimal fundListSize = new BigDecimal(fundList.size()).setScale(4, BigDecimal.ROUND_HALF_DOWN);
+        for (InvestmentFund investmentFund : fundList) {
+            FundAmountOfMoneyDivision fundAmountOfMoneyDivision = new FundAmountOfMoneyDivision();
+            fundAmountOfMoneyDivision.setFundType(investmentFund.getType());
+            fundAmountOfMoneyDivision.setFundName(investmentFund.getName());
+
+            BigDecimal investmentPercent = new BigDecimal(0);
+            switch (investmentFund.getType()){
+                case POLISH:
+                    investmentPercent = investmentProfile.getPercentPolish();
+                    break;
+                case FOREIGN:
+                    investmentPercent = investmentProfile.getPercentForeign();
+                    break;
+                case MONEY:
+                    investmentPercent = investmentProfile.getPercentMoney();
+                    break;
+            }
+
+            BigDecimal dividedMoney = investmentMoney
+                    .multiply(investmentPercent)
+                    .divide(fundListSize, 4, BigDecimal.ROUND_HALF_DOWN)
+                    .setScale(2, BigDecimal.ROUND_HALF_DOWN);
+            fundAmountOfMoneyDivision.setDividedMoney(dividedMoney);
+            BigDecimal dividedPercent = investmentPercent
+                    .divide(fundListSize, 4, BigDecimal.ROUND_HALF_DOWN)
+                    .setScale(4, BigDecimal.ROUND_HALF_DOWN);
+            fundAmountOfMoneyDivision.setDividedPercent(dividedPercent);
+
+            System.out.println(fundAmountOfMoneyDivision.toString());
+            fundAmountOfMoneyDivisionList.add(fundAmountOfMoneyDivision);
+        }
         return fundAmountOfMoneyDivisionList;
     }
 }
