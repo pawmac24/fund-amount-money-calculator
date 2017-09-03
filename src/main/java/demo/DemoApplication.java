@@ -36,6 +36,7 @@ public class DemoApplication implements CommandLineRunner {
 						investmentMoney,
 						investmentProfile,
 						investmentFunds);
+		fundAmountOfMoneyDivisions.stream().forEach(System.out::println);
 	}
 
 	public static void main(String[] args) {
