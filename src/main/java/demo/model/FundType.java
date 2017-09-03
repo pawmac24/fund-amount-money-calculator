@@ -1,9 +1,9 @@
 package demo.model;
 
 public enum FundType {
-    POLISH("polskie"),
-    FOREIGN("zagraniczne"),
-    MONEY("pieniezne")
+    POLISH("polish"),
+    FOREIGN("foreign"),
+    MONEY("money")
     ;
 
     private String code;
