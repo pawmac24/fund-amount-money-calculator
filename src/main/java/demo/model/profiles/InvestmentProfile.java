@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Getter
 public abstract class InvestmentProfile {
-    private static final BigDecimal DENOMINATOR_PERCENT = new BigDecimal(100.00).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+    private static final BigDecimal DENOMINATOR_PERCENT = new BigDecimal(100);
 
     private BigDecimal percentPolish = new BigDecimal(0);
     private BigDecimal percentForeign = new BigDecimal(0);
