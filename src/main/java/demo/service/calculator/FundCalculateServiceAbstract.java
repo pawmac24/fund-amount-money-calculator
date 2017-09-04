@@ -14,26 +14,26 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 
 	List<FundDivision> calculateFundDivision(BigDecimal investmentMoney, List<InvestmentFund> investmentFunds,
 											 InvestmentProfile investmentProfile) {
-		List<FundDivision> fundDivisionList = new ArrayList<>();;
+		List<FundDivision> fundDivisionList = new ArrayList<>();
 		fundDivisionList.addAll(calculatePolishFundDivision(investmentMoney, investmentProfile, investmentFunds));
 		fundDivisionList.addAll(calculateForeignFundDivision(investmentMoney, investmentProfile, investmentFunds));
 		fundDivisionList.addAll(calculateMoneyFundDivision(investmentMoney, investmentProfile, investmentFunds));
 		return fundDivisionList;
 	}
 
-	List<FundDivision> calculatePolishFundDivision(BigDecimal investmentMoney, InvestmentProfile investmentProfile,
+	private List<FundDivision> calculatePolishFundDivision(BigDecimal investmentMoney, InvestmentProfile investmentProfile,
 												   List<InvestmentFund> fundList) {
 		List<InvestmentFund> polishFundList = filterFunds(fundList, FundType.POLISH);
 		return calculateFundDivision(investmentMoney, investmentProfile.getPercentPolish(), polishFundList);
 	}
 
-	List<FundDivision> calculateForeignFundDivision(BigDecimal investmentMoney, InvestmentProfile investmentProfile,
+	private List<FundDivision> calculateForeignFundDivision(BigDecimal investmentMoney, InvestmentProfile investmentProfile,
 													List<InvestmentFund> fundList) {
 		List<InvestmentFund> foreignFundList = filterFunds(fundList, FundType.FOREIGN);
 		return calculateFundDivision(investmentMoney, investmentProfile.getPercentForeign(), foreignFundList);
 	}
 
-	List<FundDivision> calculateMoneyFundDivision(BigDecimal investmentMoney, InvestmentProfile investmentProfile,
+	private List<FundDivision> calculateMoneyFundDivision(BigDecimal investmentMoney, InvestmentProfile investmentProfile,
 												  List<InvestmentFund> fundList) {
 		List<InvestmentFund> moneyFundList = filterFunds(fundList, FundType.MONEY);
 		return calculateFundDivision(investmentMoney, investmentProfile.getPercentMoney(), moneyFundList);
