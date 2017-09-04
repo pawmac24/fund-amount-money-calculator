@@ -1,6 +1,6 @@
 package demo;
 
-import demo.model.FundAmountOfMoneyDivision;
+import demo.model.FundDivision;
 import demo.model.InvestmentFund;
 import demo.service.FundProducerService;
 import demo.service.calculator.FundCalculateService;
@@ -34,29 +34,22 @@ public class DemoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		System.out.println("=== PREPARE ===");
-
 		List<InvestmentFund> investmentFunds = fundProducerService.prepareInvestmentFunds();
 		investmentFunds.stream().forEach(System.out::println);
 
 		BigDecimal investmentMoney = new BigDecimal(10000);
 
 		System.out.println("=== SAVE ===");
-
-		List<FundAmountOfMoneyDivision> saveFundAmountOfMoneyDivisions =
-				saveFundCalculateService.divideAmountOfMoney(investmentMoney, investmentFunds);
-		saveFundAmountOfMoneyDivisions.stream().forEach(System.out::println);
+		List<FundDivision> saveFundDivisions = saveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		saveFundDivisions.stream().forEach(System.out::println);
 
 		System.out.println("=== BALANCED ===");
-
-		List<FundAmountOfMoneyDivision> balancedFundAmountOfMoneyDivisions =
-				balancedFundCalculateService.divideAmountOfMoney(investmentMoney, investmentFunds);
-		balancedFundAmountOfMoneyDivisions.stream().forEach(System.out::println);
+		List<FundDivision> balancedFundDivisions = balancedFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		balancedFundDivisions.stream().forEach(System.out::println);
 
 		System.out.println("=== AGGRESSIVE ===");
-
-		List<FundAmountOfMoneyDivision> aggressiveFundAmountOfMoneyDivisions =
-				aggressiveFundCalculateService.divideAmountOfMoney(investmentMoney, investmentFunds);
-		aggressiveFundAmountOfMoneyDivisions.stream().forEach(System.out::println);
+		List<FundDivision> aggressiveFundDivisions = aggressiveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		aggressiveFundDivisions.stream().forEach(System.out::println);
 	}
 
 	public static void main(String[] args) {
