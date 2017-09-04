@@ -20,17 +20,17 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class BalancedFundCalculateServiceImplTest {
+public class SafeFundCalculateServiceImplTest {
 
     @Autowired
     private FundProducerService fundProducerService;
 
     @Autowired
-    @Qualifier("balancedFundCalculateService")
+    @Qualifier("safeFundCalculateService")
     private FundCalculateService fundCalculateService;
 
     @Test
-    public void testBalancedCalculateFundDivision(){
+    public void calculateFundDivision() {
         BigDecimal investmentMoney = new BigDecimal(10000);
 
         //given
@@ -48,17 +48,18 @@ public class BalancedFundCalculateServiceImplTest {
         assertEquals("FOREIGN FUND 2", fundDivisions.get(3).getFundName());
         assertEquals("FOREIGN FUND 3", fundDivisions.get(4).getFundName());
         assertEquals("MONEY FUND 1", fundDivisions.get(5).getFundName());
-        assertEquals(new BigDecimal(1500.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(0).getDividedMoney());
-        assertEquals(new BigDecimal(1500.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(1).getDividedMoney());
-        assertEquals(new BigDecimal(2000.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(2).getDividedMoney());
-        assertEquals(new BigDecimal(2000.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(3).getDividedMoney());
-        assertEquals(new BigDecimal(2000.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(4).getDividedMoney());
-        assertEquals(new BigDecimal(1000.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(5).getDividedMoney());
-        assertEquals(new BigDecimal(0.1500).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(0).getDividedPercent());
-        assertEquals(new BigDecimal(0.1500).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(1).getDividedPercent());
-        assertEquals(new BigDecimal(0.2000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(2).getDividedPercent());
-        assertEquals(new BigDecimal(0.2000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(3).getDividedPercent());
-        assertEquals(new BigDecimal(0.2000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(4).getDividedPercent());
-        assertEquals(new BigDecimal(0.1000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(5).getDividedPercent());
+        assertEquals(new BigDecimal(1000.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(0).getDividedMoney());
+        assertEquals(new BigDecimal(1000.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(1).getDividedMoney());
+        assertEquals(new BigDecimal(2500.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(2).getDividedMoney());
+        assertEquals(new BigDecimal(2500.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(3).getDividedMoney());
+        assertEquals(new BigDecimal(2500.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(4).getDividedMoney());
+        assertEquals(new BigDecimal(500.00).setScale(2, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(5).getDividedMoney());
+        assertEquals(new BigDecimal(0.1000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(0).getDividedPercent());
+        assertEquals(new BigDecimal(0.1000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(1).getDividedPercent());
+        assertEquals(new BigDecimal(0.2500).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(2).getDividedPercent());
+        assertEquals(new BigDecimal(0.2500).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(3).getDividedPercent());
+        assertEquals(new BigDecimal(0.2500).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(4).getDividedPercent());
+        assertEquals(new BigDecimal(0.0500).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(5).getDividedPercent());
     }
+
 }
