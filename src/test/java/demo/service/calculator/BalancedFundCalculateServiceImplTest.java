@@ -1,8 +1,8 @@
 package demo.service.calculator;
 
+import demo.dataprovider.TestDataProvider01;
 import demo.model.FundDivision;
 import demo.model.InvestmentFund;
-import demo.service.FundProducerService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 public class BalancedFundCalculateServiceImplTest {
 
     @Autowired
-    private FundProducerService fundProducerService;
+    private TestDataProvider01 testDataProvider01;
 
     @Autowired
     @Qualifier("balancedFundCalculateService")
@@ -34,7 +34,7 @@ public class BalancedFundCalculateServiceImplTest {
         BigDecimal investmentMoney = new BigDecimal(10000);
 
         //given
-        List<InvestmentFund> investmentFundList = fundProducerService.prepareInvestmentFunds();
+        List<InvestmentFund> investmentFundList = testDataProvider01.prepareInvestmentFunds();
 
         //when
         List<FundDivision> fundDivisions = fundCalculateService.calculateFundDivision(investmentMoney, investmentFundList);
