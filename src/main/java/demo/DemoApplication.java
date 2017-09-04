@@ -2,11 +2,10 @@ package demo;
 
 import demo.model.FundAmountOfMoneyDivision;
 import demo.model.InvestmentFund;
-import demo.model.profiles.InvestmentProfile;
-import demo.model.profiles.SafeInvestmentProfile;
-import demo.service.FundMoneyDivisionCalculatorService;
 import demo.service.FundProducerService;
+import demo.service.calculator.FundCalculateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,22 +20,43 @@ public class DemoApplication implements CommandLineRunner {
 	private FundProducerService fundProducerService;
 
 	@Autowired
-	private FundMoneyDivisionCalculatorService fundMoneyDivisionCalculatorService;
+	@Qualifier("safeFundCalculateService")
+	private FundCalculateService saveFundCalculateService;
+
+	@Autowired
+	@Qualifier("balancedFundCalculateService")
+	private FundCalculateService balancedFundCalculateService;
+
+	@Autowired
+	@Qualifier("aggressiveFundCalculateService")
+	private FundCalculateService aggressiveFundCalculateService;
 
 	@Override
 	public void run(String... args) {
-		System.out.println("Hello");
+		System.out.println("=== PREPARE ===");
+
 		List<InvestmentFund> investmentFunds = fundProducerService.prepareInvestmentFunds();
 		investmentFunds.stream().forEach(System.out::println);
 
 		BigDecimal investmentMoney = new BigDecimal(10000);
-		InvestmentProfile investmentProfile = new SafeInvestmentProfile();
-		List<FundAmountOfMoneyDivision> fundAmountOfMoneyDivisions =
-				fundMoneyDivisionCalculatorService.divideAmountOfMoney(
-						investmentMoney,
-						investmentProfile,
-						investmentFunds);
-		fundAmountOfMoneyDivisions.stream().forEach(System.out::println);
+
+		System.out.println("=== SAVE ===");
+
+		List<FundAmountOfMoneyDivision> saveFundAmountOfMoneyDivisions =
+				saveFundCalculateService.divideAmountOfMoney(investmentMoney, investmentFunds);
+		saveFundAmountOfMoneyDivisions.stream().forEach(System.out::println);
+
+		System.out.println("=== BALANCED ===");
+
+		List<FundAmountOfMoneyDivision> balancedFundAmountOfMoneyDivisions =
+				balancedFundCalculateService.divideAmountOfMoney(investmentMoney, investmentFunds);
+		balancedFundAmountOfMoneyDivisions.stream().forEach(System.out::println);
+
+		System.out.println("=== AGGRESSIVE ===");
+
+		List<FundAmountOfMoneyDivision> aggressiveFundAmountOfMoneyDivisions =
+				aggressiveFundCalculateService.divideAmountOfMoney(investmentMoney, investmentFunds);
+		aggressiveFundAmountOfMoneyDivisions.stream().forEach(System.out::println);
 	}
 
 	public static void main(String[] args) {
