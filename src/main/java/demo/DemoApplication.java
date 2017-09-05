@@ -42,16 +42,16 @@ public class DemoApplication implements CommandLineRunner {
 		BigDecimal investmentMoney = new BigDecimal(10000);
 
 		log.debug("=== SAVE ===");
-		//List<FundDivision> saveFundDivisions = saveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
-		//saveFundDivisions.stream().forEach(f -> log.debug(f.toString()));
+		List<FundDivision> saveFundDivisions = saveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		saveFundDivisions.stream().forEach(f -> log.debug(f.toString()));
 
 		log.debug("=== BALANCED ===");
-		//List<FundDivision> balancedFundDivisions = balancedFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
-		//balancedFundDivisions.stream().forEach(f -> log.debug(f.toString()));
+		List<FundDivision> balancedFundDivisions = balancedFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		balancedFundDivisions.stream().forEach(f -> log.debug(f.toString()));
 
 		log.debug("=== AGGRESSIVE ===");
-		//List<FundDivision> aggressiveFundDivisions = aggressiveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
-		//aggressiveFundDivisions.stream().forEach(f -> log.debug(f.toString()));
+		List<FundDivision> aggressiveFundDivisions = aggressiveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		aggressiveFundDivisions.stream().forEach(f -> log.debug(f.toString()));
 	}
 
 	public static void main(String[] args) {
