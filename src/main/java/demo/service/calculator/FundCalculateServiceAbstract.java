@@ -4,12 +4,14 @@ import demo.model.FundDivision;
 import demo.model.FundType;
 import demo.model.InvestmentFund;
 import demo.model.profiles.InvestmentProfile;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 abstract class FundCalculateServiceAbstract implements FundCalculateService {
 
 	List<FundDivision> calculateFundDivision(BigDecimal investmentMoney, List<InvestmentFund> investmentFunds,
@@ -42,22 +44,48 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 	private List<FundDivision> calculateFundDivision(BigDecimal investmentMoney, BigDecimal investmentPercent,
 													 List<InvestmentFund> fundList) {
 		List<FundDivision> fundDivisionList = new ArrayList<>();
-		for (InvestmentFund investmentFund : fundList) {
+		int count = fundList.size();
 
-			double money = investmentMoney.doubleValue();
-			double percent = investmentPercent.doubleValue();
-			int count = fundList.size();
-
-			BigDecimal dividedMoney = new BigDecimal((money * percent) / count)
+		BigDecimal dividedMoneyByPercent = investmentMoney
+				.multiply(investmentPercent)
+				.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+		BigDecimal remainder = dividedMoneyByPercent.remainder(new BigDecimal(count)).setScale(0, BigDecimal.ROUND_HALF_DOWN);
+		log.debug("dividedMoneyByPercent = " + dividedMoneyByPercent
+				+ ", count = " + count
+				+ ", remainder = " + remainder);
+		if (remainder.compareTo(BigDecimal.ZERO) > 0) {
+			dividedMoneyByPercent = dividedMoneyByPercent
+					.subtract(remainder)
 					.setScale(2, BigDecimal.ROUND_HALF_DOWN);
-			BigDecimal dividedPercent = new BigDecimal(percent / count)
-					.setScale(4, BigDecimal.ROUND_HALF_DOWN);
+		}
+		log.debug("investmentMoney = " + investmentMoney
+				+ ", investmentPercent = " + investmentPercent
+				+ ", dividedMoneyByPercent = " + dividedMoneyByPercent
+				+ ", count = " + count
+				+ ", remainder = " + remainder);
+
+		double money = dividedMoneyByPercent.doubleValue();
+		double percent = investmentPercent.doubleValue();
+
+		BigDecimal dividedMoney = new BigDecimal(dividedMoneyByPercent.doubleValue() / count)
+				.setScale(0, BigDecimal.ROUND_HALF_DOWN);
+		BigDecimal dividedPercent = new BigDecimal(percent / count)
+				.setScale(4, BigDecimal.ROUND_HALF_DOWN);
+
+		for (InvestmentFund investmentFund : fundList) {
 
 			FundDivision fundDivision = new FundDivision();
 			fundDivision.setFundType(investmentFund.getType());
 			fundDivision.setFundName(investmentFund.getName());
-			fundDivision.setDividedMoney(dividedMoney);
+			BigDecimal dividedMoneyCopy = new BigDecimal(dividedMoney.doubleValue())
+					.setScale(0, BigDecimal.ROUND_HALF_DOWN);
+			if(remainder.compareTo(BigDecimal.ZERO) > 0){
+				dividedMoneyCopy = dividedMoneyCopy.add(remainder);
+				remainder = BigDecimal.ZERO;
+			}
+			fundDivision.setDividedMoney(dividedMoneyCopy);
 			fundDivision.setDividedPercent(dividedPercent);
+			log.debug(fundDivision.toString());
 
 			fundDivisionList.add(fundDivision);
 		}

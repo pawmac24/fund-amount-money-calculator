@@ -4,6 +4,7 @@ import demo.model.FundDivision;
 import demo.model.InvestmentFund;
 import demo.service.FundProducerService;
 import demo.service.calculator.FundCalculateService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @SpringBootApplication
+@Slf4j
 public class DemoApplication implements CommandLineRunner {
 
 	@Autowired
@@ -33,23 +35,23 @@ public class DemoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) {
-		System.out.println("=== PREPARE ===");
+		log.debug("=== PREPARE ===");
 		List<InvestmentFund> investmentFunds = fundProducerService.prepareInvestmentFunds();
-		investmentFunds.stream().forEach(System.out::println);
+		investmentFunds.stream().forEach(f -> log.debug(f.toString()));
 
 		BigDecimal investmentMoney = new BigDecimal(10000);
 
-		System.out.println("=== SAVE ===");
-		List<FundDivision> saveFundDivisions = saveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
-		saveFundDivisions.stream().forEach(System.out::println);
+		log.debug("=== SAVE ===");
+		//List<FundDivision> saveFundDivisions = saveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		//saveFundDivisions.stream().forEach(f -> log.debug(f.toString()));
 
-		System.out.println("=== BALANCED ===");
-		List<FundDivision> balancedFundDivisions = balancedFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
-		balancedFundDivisions.stream().forEach(System.out::println);
+		log.debug("=== BALANCED ===");
+		//List<FundDivision> balancedFundDivisions = balancedFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		//balancedFundDivisions.stream().forEach(f -> log.debug(f.toString()));
 
-		System.out.println("=== AGGRESSIVE ===");
-		List<FundDivision> aggressiveFundDivisions = aggressiveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
-		aggressiveFundDivisions.stream().forEach(System.out::println);
+		log.debug("=== AGGRESSIVE ===");
+		//List<FundDivision> aggressiveFundDivisions = aggressiveFundCalculateService.calculateFundDivision(investmentMoney, investmentFunds);
+		//aggressiveFundDivisions.stream().forEach(f -> log.debug(f.toString()));
 	}
 
 	public static void main(String[] args) {
