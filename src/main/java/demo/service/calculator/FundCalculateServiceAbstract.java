@@ -46,10 +46,9 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 		List<FundDivision> fundDivisionList = new ArrayList<>();
 		int count = fundList.size();
 		double percent = investmentPercent.doubleValue();
+		double money = investmentMoney.doubleValue();
 
-		BigDecimal dividedMoneyByPercent = investmentMoney
-				.multiply(investmentPercent)
-				.setScale(2, BigDecimal.ROUND_HALF_DOWN);
+		BigDecimal dividedMoneyByPercent = new BigDecimal(money * percent).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 		BigDecimal remainder = dividedMoneyByPercent.remainder(new BigDecimal(count)).setScale(0, BigDecimal.ROUND_HALF_DOWN);
 		log.debug("dividedMoneyByPercent = " + dividedMoneyByPercent
 				+ ", count = " + count
