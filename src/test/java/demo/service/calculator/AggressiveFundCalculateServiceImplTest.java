@@ -57,9 +57,9 @@ public class AggressiveFundCalculateServiceImplTest {
         assertEquals(new BigDecimal(4000), fundDivisions.get(5).getDividedMoney());
         assertEquals(new BigDecimal(0.2000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(0).getDividedPercent());
         assertEquals(new BigDecimal(0.2000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(1).getDividedPercent());
-        assertEquals(new BigDecimal(0.0667).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(2).getDividedPercent());
-        assertEquals(new BigDecimal(0.0667).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(3).getDividedPercent());
-        assertEquals(new BigDecimal(0.0667).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(4).getDividedPercent());
+        assertEquals(new BigDecimal(0.0668).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(2).getDividedPercent());
+        assertEquals(new BigDecimal(0.0666).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(3).getDividedPercent());
+        assertEquals(new BigDecimal(0.0666).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(4).getDividedPercent());
         assertEquals(new BigDecimal(0.4000).setScale(4, BigDecimal.ROUND_HALF_DOWN), fundDivisions.get(5).getDividedPercent());
         BigDecimal actualMoneySum = BigDecimal.ZERO;
         for (FundDivision fundDivision : fundDivisions) {
