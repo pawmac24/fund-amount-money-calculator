@@ -45,10 +45,39 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 													 List<InvestmentFund> fundList) {
 		List<FundDivision> fundDivisionList = new ArrayList<>();
 		int count = fundList.size();
+
+		//calculate dividedMoney
+		List<BigDecimal> dividedMoneyList = calculateDividedMoneyList(investmentMoney, investmentPercent, count);
+
+		//calculate dividedPercent
+		List<BigDecimal> dividedPercentList = calculateDividedPercentList(investmentPercent, count);
+
+		//
+		int i = 0;
+		for (InvestmentFund investmentFund : fundList) {
+			FundDivision fundDivision = new FundDivision();
+			fundDivision.setFundType(investmentFund.getType());
+			fundDivision.setFundName(investmentFund.getName());
+			fundDivision.setDividedMoney(dividedMoneyList.get(i));
+			fundDivision.setDividedPercent(dividedPercentList.get(i));
+			log.debug(fundDivision.toString());
+
+			fundDivisionList.add(fundDivision);
+			i++;
+		}
+		return fundDivisionList;
+	}
+
+	private List<InvestmentFund> filterFunds(List<InvestmentFund> investmentFunds, FundType fundType) {
+		return investmentFunds.stream()
+				.filter(i -> i.getType().equals(fundType))
+				.collect(Collectors.toList());
+	}
+
+	private List<BigDecimal> calculateDividedMoneyList(BigDecimal investmentMoney, BigDecimal investmentPercent, int count){
 		double percent = investmentPercent.doubleValue();
 		double money = investmentMoney.doubleValue();
 
-		//calculate dividedMoney
 		BigDecimal dividedMoneyByPercent = new BigDecimal(money * percent).setScale(2, BigDecimal.ROUND_HALF_DOWN);
 		BigDecimal remainderForMoney = dividedMoneyByPercent.remainder(new BigDecimal(count)).setScale(0, BigDecimal.ROUND_HALF_DOWN);
 		log.debug("dividedMoneyByPercent = " + dividedMoneyByPercent
@@ -67,36 +96,17 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 
 		BigDecimal dividedMoney = new BigDecimal(dividedMoneyByPercent.doubleValue() / count)
 				.setScale(0, BigDecimal.ROUND_HALF_DOWN);
-
-		//calculate dividedPercent
-		List<BigDecimal> dividedPercentList = calculateDividedPercentList(investmentPercent, count);
-
-		//
-		int i = 0;
-		for (InvestmentFund investmentFund : fundList) {
-			FundDivision fundDivision = new FundDivision();
-			fundDivision.setFundType(investmentFund.getType());
-			fundDivision.setFundName(investmentFund.getName());
-			BigDecimal dividedMoneyCopy = new BigDecimal(dividedMoney.doubleValue())
-					.setScale(0, BigDecimal.ROUND_HALF_DOWN);
-			if(remainderForMoney.compareTo(BigDecimal.ZERO) > 0){
-				dividedMoneyCopy = dividedMoneyCopy.add(remainderForMoney);
-				remainderForMoney = BigDecimal.ZERO;
-			}
-			fundDivision.setDividedMoney(dividedMoneyCopy);
-			fundDivision.setDividedPercent(dividedPercentList.get(i));
-			log.debug(fundDivision.toString());
-
-			fundDivisionList.add(fundDivision);
-			i++;
+		BigDecimal firstDividedMoney = new BigDecimal(dividedMoney.doubleValue())
+				.setScale(0, BigDecimal.ROUND_HALF_DOWN);
+		if(remainderForMoney.compareTo(BigDecimal.ZERO) > 0){
+			firstDividedMoney = firstDividedMoney.add(remainderForMoney);
 		}
-		return fundDivisionList;
-	}
-
-	private List<InvestmentFund> filterFunds(List<InvestmentFund> investmentFunds, FundType fundType) {
-		return investmentFunds.stream()
-				.filter(i -> i.getType().equals(fundType))
-				.collect(Collectors.toList());
+		List<BigDecimal> dividedMoneyList = new ArrayList<>();
+		dividedMoneyList.add(firstDividedMoney);
+		for(int i = 1; i < count; i++){
+			dividedMoneyList.add(dividedMoney);
+		}
+		return dividedMoneyList;
 	}
 
 	private List<BigDecimal> calculateDividedPercentList(BigDecimal investmentPercent, int count){
