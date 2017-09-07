@@ -69,6 +69,47 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 				.setScale(0, BigDecimal.ROUND_HALF_DOWN);
 
 		//calculate dividedPercent
+		List<BigDecimal> dividedPercentList = calculateDividedPercentList(investmentPercent, count);
+		
+		//
+		int i = 0;
+		for (InvestmentFund investmentFund : fundList) {
+			FundDivision fundDivision = new FundDivision();
+			fundDivision.setFundType(investmentFund.getType());
+			fundDivision.setFundName(investmentFund.getName());
+			BigDecimal dividedMoneyCopy = new BigDecimal(dividedMoney.doubleValue())
+					.setScale(0, BigDecimal.ROUND_HALF_DOWN);
+			if(remainderForMoney.compareTo(BigDecimal.ZERO) > 0){
+				dividedMoneyCopy = dividedMoneyCopy.add(remainderForMoney);
+				remainderForMoney = BigDecimal.ZERO;
+			}
+			fundDivision.setDividedMoney(dividedMoneyCopy);
+
+//			BigDecimal dividedPercentCopy = new BigDecimal(dividedPercent.doubleValue())
+//					.setScale(4, BigDecimal.ROUND_HALF_DOWN);
+//			if(remainderForPercent.compareTo(BigDecimal.ZERO) > 0){
+//				dividedPercentCopy = dividedPercentCopy
+//						.add(new BigDecimal(remainderForPercent.doubleValue() * 0.0001))
+//						.setScale(4, BigDecimal.ROUND_HALF_DOWN);
+//				remainderForPercent = BigDecimal.ZERO;
+//			}
+//			fundDivision.setDividedPercent(dividedPercentCopy);
+			fundDivision.setDividedPercent(dividedPercentList.get(i));
+			log.debug(fundDivision.toString());
+
+			fundDivisionList.add(fundDivision);
+			i++;
+		}
+		return fundDivisionList;
+	}
+
+	private List<InvestmentFund> filterFunds(List<InvestmentFund> investmentFunds, FundType fundType) {
+		return investmentFunds.stream()
+				.filter(i -> i.getType().equals(fundType))
+				.collect(Collectors.toList());
+	}
+
+	private List<BigDecimal> calculateDividedPercentList(BigDecimal investmentPercent, int count){
 		BigDecimal remainderForPercent = investmentPercent
 				.multiply(new BigDecimal(10000))
 				.remainder(new BigDecimal(count))
@@ -89,39 +130,18 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 					.setScale(4, BigDecimal.ROUND_HALF_DOWN);
 			log.debug("dividedPercent=" + dividedPercent);
 		}
-
-		//
-		for (InvestmentFund investmentFund : fundList) {
-			FundDivision fundDivision = new FundDivision();
-			fundDivision.setFundType(investmentFund.getType());
-			fundDivision.setFundName(investmentFund.getName());
-			BigDecimal dividedMoneyCopy = new BigDecimal(dividedMoney.doubleValue())
-					.setScale(0, BigDecimal.ROUND_HALF_DOWN);
-			if(remainderForMoney.compareTo(BigDecimal.ZERO) > 0){
-				dividedMoneyCopy = dividedMoneyCopy.add(remainderForMoney);
-				remainderForMoney = BigDecimal.ZERO;
-			}
-			fundDivision.setDividedMoney(dividedMoneyCopy);
-
-			BigDecimal dividedPercentCopy = new BigDecimal(dividedPercent.doubleValue())
+		BigDecimal firstDividedPercent = new BigDecimal(dividedPercent.doubleValue())
+				.setScale(4, BigDecimal.ROUND_HALF_DOWN);
+		if(remainderForPercent.compareTo(BigDecimal.ZERO) > 0){
+			firstDividedPercent = firstDividedPercent
+					.add(new BigDecimal(remainderForPercent.doubleValue() * 0.0001))
 					.setScale(4, BigDecimal.ROUND_HALF_DOWN);
-			if(remainderForPercent.compareTo(BigDecimal.ZERO) > 0){
-				dividedPercentCopy = dividedPercentCopy
-						.add(new BigDecimal(remainderForPercent.doubleValue() * 0.0001))
-						.setScale(4, BigDecimal.ROUND_HALF_DOWN);
-				remainderForPercent = BigDecimal.ZERO;
-			}
-			fundDivision.setDividedPercent(dividedPercentCopy);
-			log.debug(fundDivision.toString());
-
-			fundDivisionList.add(fundDivision);
 		}
-		return fundDivisionList;
-	}
-
-	private List<InvestmentFund> filterFunds(List<InvestmentFund> investmentFunds, FundType fundType) {
-		return investmentFunds.stream()
-				.filter(i -> i.getType().equals(fundType))
-				.collect(Collectors.toList());
+		List<BigDecimal> dividedPercentList = new ArrayList<>();
+		dividedPercentList.add(firstDividedPercent);
+		for(int i = 1; i < count; i++){
+			dividedPercentList.add(dividedPercent);
+		}
+		return dividedPercentList;
 	}
 }
