@@ -70,7 +70,7 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 
 		//calculate dividedPercent
 		List<BigDecimal> dividedPercentList = calculateDividedPercentList(investmentPercent, count);
-		
+
 		//
 		int i = 0;
 		for (InvestmentFund investmentFund : fundList) {
@@ -84,16 +84,6 @@ abstract class FundCalculateServiceAbstract implements FundCalculateService {
 				remainderForMoney = BigDecimal.ZERO;
 			}
 			fundDivision.setDividedMoney(dividedMoneyCopy);
-
-//			BigDecimal dividedPercentCopy = new BigDecimal(dividedPercent.doubleValue())
-//					.setScale(4, BigDecimal.ROUND_HALF_DOWN);
-//			if(remainderForPercent.compareTo(BigDecimal.ZERO) > 0){
-//				dividedPercentCopy = dividedPercentCopy
-//						.add(new BigDecimal(remainderForPercent.doubleValue() * 0.0001))
-//						.setScale(4, BigDecimal.ROUND_HALF_DOWN);
-//				remainderForPercent = BigDecimal.ZERO;
-//			}
-//			fundDivision.setDividedPercent(dividedPercentCopy);
 			fundDivision.setDividedPercent(dividedPercentList.get(i));
 			log.debug(fundDivision.toString());
 
