@@ -3,7 +3,6 @@ package demo.service.calculator.division;
 import demo.model.FundDivision;
 import demo.model.FundType;
 import demo.model.InvestmentFund;
-import demo.model.profiles.InvestmentProfile;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -12,11 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-abstract class FundDivisionAbstractCalculator {
-
-    abstract List<FundDivision> calculate(BigDecimal investmentMoney,
-                                          InvestmentProfile investmentProfile,
-                                          List<InvestmentFund> fundList);
+abstract class FundDivisionAbstractCalculator implements FundDivisionCalculatorService{
 
     List<InvestmentFund> filterFunds(List<InvestmentFund> investmentFunds, FundType fundType) {
         return investmentFunds.stream()

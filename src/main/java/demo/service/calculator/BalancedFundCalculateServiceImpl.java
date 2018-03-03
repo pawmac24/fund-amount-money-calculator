@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Component("balancedFundCalculateService")
-public class BalancedFundCalculateServiceImpl extends FundCalculateServiceAbstract implements FundCalculateService {
+public class BalancedFundCalculateServiceImpl extends FundCalculateServiceAbstract {
 
 	@Override
 	public List<FundDivision> calculateFundDivision(BigDecimal investmentMoney, List<InvestmentFund> investmentFunds) {
