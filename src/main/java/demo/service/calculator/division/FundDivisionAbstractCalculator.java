@@ -22,34 +22,32 @@ abstract class FundDivisionAbstractCalculator implements FundDivisionCalculatorS
     List<FundDivision> calculateFundDivision(BigDecimal investmentMoney, BigDecimal investmentPercent,
                                                      List<InvestmentFund> fundList) {
         List<FundDivision> fundDivisionList = new ArrayList<>();
-        int count = fundList.size();
-        double percent = investmentPercent.doubleValue();
-        double money = investmentMoney.doubleValue();
+        BigDecimal count = new BigDecimal(fundList.size());
 
         //calculate dividedMoney
-        BigDecimal dividedMoneyByPercent = new BigDecimal(money * percent).setScale(2, BigDecimal.ROUND_HALF_DOWN);
-        BigDecimal remainderForMoney = dividedMoneyByPercent.remainder(new BigDecimal(count)).setScale(0, BigDecimal.ROUND_HALF_DOWN);
-        log.debug("dividedMoneyByPercent = " + dividedMoneyByPercent
+        BigDecimal multiplyMoneyByPercent = investmentPercent.multiply(investmentMoney).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        BigDecimal remainderForMoney = multiplyMoneyByPercent.remainder(count).setScale(0, BigDecimal.ROUND_HALF_DOWN);
+        log.debug("multiplyMoneyByPercent = " + multiplyMoneyByPercent
                 + ", count = " + count
                 + ", remainderForMoney = " + remainderForMoney);
         if (remainderForMoney.compareTo(BigDecimal.ZERO) > 0) {
-            dividedMoneyByPercent = dividedMoneyByPercent
+            multiplyMoneyByPercent = multiplyMoneyByPercent
                     .subtract(remainderForMoney)
                     .setScale(2, BigDecimal.ROUND_HALF_DOWN);
         }
         log.debug("investmentMoney = " + investmentMoney
                 + ", investmentPercent = " + investmentPercent
-                + ", dividedMoneyByPercent = " + dividedMoneyByPercent
+                + ", multiplyMoneyByPercent = " + multiplyMoneyByPercent
                 + ", count = " + count
                 + ", remainderForMoney = " + remainderForMoney);
 
-        BigDecimal dividedMoney = new BigDecimal(dividedMoneyByPercent.doubleValue() / count)
+        BigDecimal dividedMoney = multiplyMoneyByPercent.divide(count, BigDecimal.ROUND_HALF_DOWN)
                 .setScale(0, BigDecimal.ROUND_HALF_DOWN);
 
         //calculate dividedPercent
         BigDecimal remainderForPercent = investmentPercent
                 .multiply(new BigDecimal(10000))
-                .remainder(new BigDecimal(count))
+                .remainder(count)
                 .setScale(0, BigDecimal.ROUND_HALF_DOWN);
         BigDecimal dividedPercent = null;
         if (remainderForPercent.compareTo(BigDecimal.ZERO) > 0) {
@@ -57,13 +55,13 @@ abstract class FundDivisionAbstractCalculator implements FundDivisionCalculatorS
             dividedPercent = investmentPercent.multiply(new BigDecimal(10000))
                     .subtract(remainderForPercent)
                     .divide(new BigDecimal(10000), BigDecimal.ROUND_HALF_DOWN)
-                    .divide(new BigDecimal(count), BigDecimal.ROUND_HALF_DOWN)
+                    .divide(count, BigDecimal.ROUND_HALF_DOWN)
                     .setScale(4, BigDecimal.ROUND_HALF_DOWN);
             log.debug("dividedPercent=" + dividedPercent);
         }
         else{
             dividedPercent = investmentPercent
-                    .divide(new BigDecimal(count), BigDecimal.ROUND_HALF_DOWN)
+                    .divide(count, BigDecimal.ROUND_HALF_DOWN)
                     .setScale(4, BigDecimal.ROUND_HALF_DOWN);
             log.debug("dividedPercent=" + dividedPercent);
         }
