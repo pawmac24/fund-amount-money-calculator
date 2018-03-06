@@ -25,4 +25,27 @@ public class BigDecimalTests {
         BigDecimal expectedResult = new BigDecimal(0.2957).setScale(4, BigDecimal.ROUND_HALF_DOWN);
         assertEquals(expectedResult, result);
     }
+
+    @Test
+    public void testCalulateDivision(){
+        BigDecimal investmentMoney = new BigDecimal(10001);
+        BigDecimal investmentPercent = new BigDecimal(0.20);
+        BigDecimal count = new BigDecimal(2);
+
+        System.out.println("1- " + investmentMoney);
+        BigDecimal moneyMultipliedByPercent = investmentPercent.multiply(investmentMoney).setScale(2, BigDecimal.ROUND_HALF_DOWN);
+        System.out.println("2- " + moneyMultipliedByPercent);
+        System.out.println("3- " + moneyMultipliedByPercent.remainder(count));
+        System.out.println("4- " + moneyMultipliedByPercent.divide(count, BigDecimal.ROUND_HALF_DOWN));
+
+        BigDecimal fractionalPart = moneyMultipliedByPercent.remainder( BigDecimal.ONE );
+        System.out.println("5- " + fractionalPart);
+        BigDecimal integralPart = moneyMultipliedByPercent.subtract(fractionalPart);
+        System.out.println("6- " + integralPart);
+
+        BigDecimal moneyCorrected = integralPart.divide(investmentPercent, BigDecimal.ROUND_HALF_DOWN);
+        System.out.println("7- " + moneyCorrected);
+        BigDecimal moneyReturn = investmentMoney.subtract(moneyCorrected);
+        System.out.println("8- " + moneyReturn);
+    }
 }

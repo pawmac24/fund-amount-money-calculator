@@ -4,18 +4,22 @@ import java.math.BigDecimal;
 
 public class SafeInvestmentProfile extends InvestmentProfile {
 
+    private static final BigDecimal FACTOR_POLISH = new BigDecimal(20);
+    private static final BigDecimal FACTOR_FOREIGN = new BigDecimal(75);
+    private static final BigDecimal FACTOR_MONEY = new BigDecimal(5);
+
     @Override
     public BigDecimal getPercentPolish() {
-        return createPercent(new BigDecimal(20));
+        return createPercent(FACTOR_POLISH);
     }
 
     @Override
     public BigDecimal getPercentForeign() {
-        return createPercent(new BigDecimal(75));
+        return createPercent(FACTOR_FOREIGN);
     }
 
     @Override
     public BigDecimal getPercentMoney() {
-        return createPercent(new BigDecimal(5));
+        return createPercent(FACTOR_MONEY);
     }
 }
