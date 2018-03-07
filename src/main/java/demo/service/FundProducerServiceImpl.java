@@ -1,34 +1,47 @@
 package demo.service;
 
+import demo.AppProperties;
 import demo.model.FundType;
 import demo.model.InvestmentFund;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
+@Slf4j
 public class FundProducerServiceImpl implements FundProducerService{
 
+    private AppProperties app;
+
+    @Autowired
+    public void setApp(AppProperties app) {
+        this.app = app;
+    }
+
     private List<InvestmentFund> preparePolishInvestmentFunds(){
-        List<InvestmentFund> investmentFundList = new ArrayList<>();
-        investmentFundList.add(new InvestmentFund("FP01", "POLISH FUND 1", FundType.POLISH));
-        investmentFundList.add(new InvestmentFund("FP02", "POLISH FUND 2", FundType.POLISH));
-        return investmentFundList;
+        return app.getPolishFunds()
+                .stream()
+                .map(f -> new InvestmentFund(f.getId(), f.getName(), FundType.POLISH))
+                .collect(toList());
     }
 
     private List<InvestmentFund> prepareForeignInvestmentFunds(){
-        List<InvestmentFund> investmentFundList = new ArrayList<>();
-        investmentFundList.add(new InvestmentFund("FF01", "FOREIGN FUND 1", FundType.FOREIGN));
-        investmentFundList.add(new InvestmentFund("FF02", "FOREIGN FUND 2", FundType.FOREIGN));
-        investmentFundList.add(new InvestmentFund("FF03", "FOREIGN FUND 3", FundType.FOREIGN));
-        return investmentFundList;
+        return app.getPolishFunds()
+                .stream()
+                .map(f -> new InvestmentFund(f.getId(), f.getName(), FundType.FOREIGN))
+                .collect(toList());
     }
 
     private List<InvestmentFund> prepareMoneyInvestmentFunds(){
-        List<InvestmentFund> investmentFundList = new ArrayList<>();
-        investmentFundList.add(new InvestmentFund("FM01", "MONEY FUND 1", FundType.MONEY));
-        return investmentFundList;
+        return app.getPolishFunds()
+                .stream()
+                .map(f -> new InvestmentFund(f.getId(), f.getName(), FundType.MONEY))
+                .collect(toList());
     }
 
     public List<InvestmentFund> prepareInvestmentFunds(){
