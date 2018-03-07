@@ -48,4 +48,26 @@ public class BigDecimalTests {
         BigDecimal moneyReturn = investmentMoney.subtract(moneyCorrected);
         System.out.println("8- " + moneyReturn);
     }
+
+    @Test
+    public void testDividingPercents()
+    {
+        BigDecimal nominator = new BigDecimal(20);
+        BigDecimal count = new BigDecimal(3);
+
+        BigDecimal percent = nominator
+                .divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_DOWN)
+                .setScale(4, BigDecimal.ROUND_HALF_DOWN);
+        System.out.println(percent);
+        BigDecimal divideBy = nominator
+                .divide(count, 4, BigDecimal.ROUND_HALF_DOWN)
+                .setScale(4, BigDecimal.ROUND_HALF_DOWN);
+        System.out.println(divideBy);
+
+        BigDecimal remainderForPercent = percent
+                .multiply(new BigDecimal(10000))
+                .remainder(count)
+                .setScale(0, BigDecimal.ROUND_HALF_DOWN);
+        System.out.println(remainderForPercent);
+    }
 }

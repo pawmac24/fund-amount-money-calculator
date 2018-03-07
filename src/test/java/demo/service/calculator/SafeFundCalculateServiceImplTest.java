@@ -133,7 +133,7 @@ public class SafeFundCalculateServiceImplTest {
         assertEquals("MONEY FUND 1", fundDivisions.get(5).getFundName());
         assertEquals(new BigDecimal(1000), fundDivisions.get(0).getDividedMoney());
         assertEquals(new BigDecimal(1000), fundDivisions.get(1).getDividedMoney());
-        assertEquals(new BigDecimal(2501), fundDivisions.get(2).getDividedMoney());
+        assertEquals(new BigDecimal(2500), fundDivisions.get(2).getDividedMoney());
         assertEquals(new BigDecimal(2500), fundDivisions.get(3).getDividedMoney());
         assertEquals(new BigDecimal(2500), fundDivisions.get(4).getDividedMoney());
         assertEquals(new BigDecimal(500), fundDivisions.get(5).getDividedMoney());
@@ -147,6 +147,6 @@ public class SafeFundCalculateServiceImplTest {
         for (FundDivision fundDivision : fundDivisions) {
             actualMoneySum = actualMoneySum.add(fundDivision.getDividedMoney());
         }
-        assertEquals(investmentMoney, actualMoneySum);
+        assertEquals(investmentMoney.subtract(new BigDecimal(1)), actualMoneySum);
     }
 }
