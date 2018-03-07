@@ -17,7 +17,7 @@ public class MoneyFundDivisionCalculator extends FundDivisionAbstractCalculator 
                                         InvestmentProfile investmentProfile,
                                         List<InvestmentFund> fundList) {
 
-        List<InvestmentFund> moneyFundList = filterFunds(fundList, FundType.MONEY);
+        List<InvestmentFund> moneyFundList = fundUtilService.filterFunds(fundList, FundType.MONEY);
         return calculateFundDivision(investmentMoney, investmentProfile.getPercentMoney(), moneyFundList);
     }
 }

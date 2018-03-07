@@ -1,23 +1,22 @@
 package demo.service.calculator.division;
 
 import demo.model.FundDivision;
-import demo.model.FundType;
 import demo.model.InvestmentFund;
+import demo.service.FundUtilService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
+@Component
 abstract class FundDivisionAbstractCalculator implements FundDivisionCalculatorService{
 
-    List<InvestmentFund> filterFunds(List<InvestmentFund> investmentFunds, FundType fundType) {
-        return investmentFunds.stream()
-                .filter(i -> i.getType().equals(fundType))
-                .collect(Collectors.toList());
-    }
+    @Autowired
+    FundUtilService fundUtilService;
 
     List<FundDivision> calculateFundDivision(BigDecimal investmentMoney, BigDecimal investmentPercent,
                                                      List<InvestmentFund> fundList) {

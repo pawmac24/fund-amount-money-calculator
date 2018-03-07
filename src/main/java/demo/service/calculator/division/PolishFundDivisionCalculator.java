@@ -17,7 +17,7 @@ public class PolishFundDivisionCalculator extends FundDivisionAbstractCalculator
                                         InvestmentProfile investmentProfile,
                                         List<InvestmentFund> fundList) {
 
-        List<InvestmentFund> polishFundList = filterFunds(fundList, FundType.POLISH);
+        List<InvestmentFund> polishFundList = fundUtilService.filterFunds(fundList, FundType.POLISH);
         return calculateFundDivision(investmentMoney, investmentProfile.getPercentPolish(), polishFundList);
     }
 }

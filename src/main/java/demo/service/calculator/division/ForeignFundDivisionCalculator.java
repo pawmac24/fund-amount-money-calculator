@@ -17,7 +17,7 @@ public class ForeignFundDivisionCalculator extends FundDivisionAbstractCalculato
                                         InvestmentProfile investmentProfile,
                                         List<InvestmentFund> fundList) {
 
-        List<InvestmentFund> foreignFundList = filterFunds(fundList, FundType.FOREIGN);
+        List<InvestmentFund> foreignFundList = fundUtilService.filterFunds(fundList, FundType.FOREIGN);
         return calculateFundDivision(investmentMoney, investmentProfile.getPercentForeign(), foreignFundList);
     }
 }
