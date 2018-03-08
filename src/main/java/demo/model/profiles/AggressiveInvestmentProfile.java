@@ -1,7 +1,10 @@
 package demo.model.profiles;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 
+@Component
 public class AggressiveInvestmentProfile extends InvestmentProfile {
 
     private static final BigDecimal FACTOR_POLISH = new BigDecimal(40);
